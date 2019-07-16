@@ -1,0 +1,7 @@
+{
+  "name": "finder",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
