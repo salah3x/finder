@@ -1,5 +1,5 @@
 {
-  "appId": "io.ionic.starter",
+  "appId": "io.github.salah3x.finder",
   "appName": "finder",
   "bundledWebRuntime": false,
   "npmClient": "npm",
