@@ -3,8 +3,8 @@
   <h2>Finder</h2>
 
 ![GitHub release](https://img.shields.io/github/release/salah3x/finder.svg?color=%23f441be)
-![GitHub](https://img.shields.io/github/license/salah3x/finder.svg?color=%232196F3)
 [![Build Status](https://travis-ci.org/salah3x/finder.svg?branch=master)](https://travis-ci.org/salah3x/finder)
+![GitHub](https://img.shields.io/github/license/salah3x/finder.svg?color=%232196F3)
 
 </div>
 
@@ -66,9 +66,9 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Ionic CLI use `ionic help` or go check out the [Ionic CLI README](https://ionicframework.com/docs/cli).
 
-<!-- To get started with firebase go to the [firebase console](https://console.firebase.google.com/) and create your first project. -->
+To get started with firebase go to the [firebase console](https://console.firebase.google.com/) and create your first project.
 
-<!-- To get more information about firebase cli use `firebase --help` or visit [the official docs](https://firebase.google.com/docs/cli/). -->
+To get more information about firebase cli use `firebase --help` or visit [the official docs](https://firebase.google.com/docs/cli/).
 
 ---
 
