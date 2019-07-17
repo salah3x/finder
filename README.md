@@ -34,7 +34,27 @@ Run `ionic build` to build the project. The build artifacts will be stored in th
 - Authenticate the cli and access Firebase projects: `firebase login`
 - Deploy the angular web app to Firebase: `npm run deploy`
 
-> The deployment phase will lint and build the projects first. -->
+> The deployment phase will automatically lint and build the projects first. -->
+
+## Android/iOS deployment
+
+- First, build the app: `ionic build --prod`
+- Next, add the platforms that you'd like to build for:
+  ```
+  npx cap add ios
+  npx cap add android
+  ```
+  > Upon running these commands, both `android` and `ios` folders at the root of the project are created. These are entirely separate native project artifacts that should be considered part of this app (i.e., check them into source control).
+- From the Terminal, run the Capacitor copy command, which copies all web assets into the native iOS project: `npx cap copy`
+
+  > Note: After making updates to the native portion of the code (such as adding a new plugin), use the sync command: `npx cap sync`
+
+- Next, run the Capacitor open command, which opens the native project in Android Studio/Xcode:
+  ```
+  npx cap open android
+  npx cap open ios
+  ```
+- Change the permissions in each project, generate the build artifacts and push them to the play/app store like you do in a normal Android/iOS project.
 
 ## Running unit tests
 
