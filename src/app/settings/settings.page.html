@@ -5,5 +5,21 @@
 </ion-header>
 
 <ion-content>
-  <ion-button expand="block" (click)="onSignOut()">Sign out</ion-button>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-md="6" offset-md="3" *ngIf="user$ | async as user" padding>
+        <ion-item>
+          <ion-avatar>
+            <img [src]="user.photoURL || 'assets/user.png'" />
+          </ion-avatar>
+          <ion-label text-center>
+            <b>{{ user.displayName }}</b>
+          </ion-label>
+          <ion-button slot="end" color="danger" (click)="onSignOut()">
+            Sign out
+          </ion-button>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
