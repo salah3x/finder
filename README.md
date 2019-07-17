@@ -4,8 +4,7 @@
 
 ![GitHub release](https://img.shields.io/github/release/salah3x/finder.svg?color=%23f441be)
 ![GitHub](https://img.shields.io/github/license/salah3x/finder.svg?color=%232196F3)
-
-<!-- [![Build Status](https://travis-ci.org/salah3x/finder.svg?branch=master)](https://travis-ci.org/salah3x/finder) -->
+[![Build Status](https://travis-ci.org/salah3x/finder.svg?branch=master)](https://travis-ci.org/salah3x/finder)
 
 </div>
 
