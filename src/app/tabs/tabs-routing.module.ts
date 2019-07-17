@@ -18,6 +18,24 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'friends',
+        children: [
+          {
+            path: '',
+            loadChildren: '../friends/friends.module#FriendsPageModule'
+          }
+        ]
+      },
+      {
+        path: 'settings',
+        children: [
+          {
+            path: '',
+            loadChildren: '../settings/settings.module#SettingsPageModule'
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/tabs/map',
         pathMatch: 'full'
