@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/salah3x/finder"
   },
-  "homepage": "https://github.com/salah3x/finder",
+  "homepage": "https://finder-99.web.app",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

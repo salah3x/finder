@@ -28,13 +28,12 @@ Run `ionic build` to build the project. The build artifacts will be stored in th
 
 > Use the `--prod` flag for a production build.
 
-<!-- ## Web deployment
+## Web deployment
 
 - Install firebase tools: `npm install -g firebase-tools`
 - Authenticate the cli and access Firebase projects: `firebase login`
-- Deploy the angular web app to Firebase: `npm run deploy`
-
-> The deployment phase will automatically lint and build the projects first. -->
+- Deploy the Ionic PWA to Firebase: `firebase deploy`
+  > The deployment phase will automatically lint and build the project first.
 
 ## Android/iOS deployment
 
