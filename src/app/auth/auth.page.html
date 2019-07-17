@@ -1,11 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title text-center>Authentication</ion-title>
+    <ion-title>Authentication</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button routerLink="/tabs/map">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-button routerLink="/tabs/map" expand="block">
-    Close
-  </ion-button>
+  <ion-img src="assets/icon/favicon.png"></ion-img>
+  <firebase-ui (signInSuccessWithAuthResult)="successCallback()"></firebase-ui>
 </ion-content>
