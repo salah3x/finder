@@ -1,7 +1,7 @@
 {
   "name": "finder",
   "version": "0.1.0",
-  "description": "",
+  "description": "A cross-platform app to share your location and find your friends on the map in real time.",
   "author": {
     "name": "Salah E. Loukili",
     "email": "salah.loukili@gmail.com",
