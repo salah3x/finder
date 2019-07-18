@@ -5,18 +5,35 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid>
+  <ion-grid *ngIf="user$ | async as user">
     <ion-row>
-      <ion-col size-md="6" offset-md="3" *ngIf="user$ | async as user" padding>
+      <ion-col size-md="6" offset-md="3" padding>
         <ion-item>
           <ion-avatar>
-            <img [src]="user.photoURL || 'assets/user.png'" />
+            <img [src]="user.photo || 'assets/user.png'" />
           </ion-avatar>
           <ion-label text-center>
-            <b>{{ user.displayName }}</b>
+            <b>{{ user.name || 'Unknown' }}</b>
           </ion-label>
           <ion-button slot="end" color="danger" (click)="onSignOut()">
             Sign out
+          </ion-button>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-md="6" offset-md="3" padding>
+        <ion-item lines="none" color="light">
+          <ion-label> <b>ID :</b> {{ user.id }} </ion-label>
+          <ion-button
+            slot="end"
+            fill="clear"
+            size="small"
+            color="medium"
+            (click)="copyToClipboard(user.id)"
+            title="Copy to clipboard"
+          >
+            <ion-icon slot="icon-only" name="clipboard"></ion-icon>
           </ion-button>
         </ion-item>
       </ion-col>
