@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { FirebaseUIModule, firebase, firebaseui } from 'firebaseui-angular';
+import { FirebaseUIModule, firebase } from 'firebaseui-angular';
 
 import { AuthPage } from './auth.page';
 
@@ -27,7 +26,6 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
     FirebaseUIModule.forRoot(firebaseUiAuthConfig)

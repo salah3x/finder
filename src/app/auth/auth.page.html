@@ -9,7 +9,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content text-center>
   <ion-img src="assets/icon/favicon.png"></ion-img>
   <firebase-ui (signInSuccessWithAuthResult)="successCallback()"></firebase-ui>
+  <ion-text color="medium" padding *ngIf="user$ | async as user">
+    You are logged in as {{ user }}
+  </ion-text>
 </ion-content>
