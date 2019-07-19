@@ -3,12 +3,12 @@ import {
   CanLoad,
   Route,
   UrlSegment,
-  Router,
   CanActivate,
   ActivatedRouteSnapshot,
   UrlTree,
   RouterStateSnapshot
 } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { take, map, tap } from 'rxjs/operators';
@@ -17,7 +17,10 @@ import { take, map, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthGuard implements CanLoad, CanActivate {
-  constructor(private authService: AngularFireAuth, private router: Router) {}
+  constructor(
+    private authService: AngularFireAuth,
+    private navCtrl: NavController
+  ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -32,7 +35,7 @@ export class AuthGuard implements CanLoad, CanActivate {
       map(user => !!user),
       tap(isAuhtenticated => {
         if (!isAuhtenticated) {
-          this.router.navigate(['/auth']);
+          this.navCtrl.navigateForward('/auth');
         }
       })
     );
@@ -47,7 +50,7 @@ export class AuthGuard implements CanLoad, CanActivate {
       map(user => !!user),
       tap(isAuhtenticated => {
         if (!isAuhtenticated) {
-          this.router.navigate(['/auth']);
+          this.navCtrl.navigateForward('/auth');
         }
       })
     );

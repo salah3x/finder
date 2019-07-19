@@ -24,6 +24,6 @@ export class AuthPage implements OnInit {
   }
 
   successCallback() {
-    this.navCtrl.navigateForward('/tabs/settings');
+    this.navCtrl.navigateBack('/tabs/settings');
   }
 }
