@@ -14,6 +14,7 @@ import { StoreService } from '../shared/store.service';
 })
 export class SettingsPage implements OnInit {
   user$: Observable<User>;
+  isCopying = false;
 
   constructor(
     private store: StoreService,
@@ -32,6 +33,9 @@ export class SettingsPage implements OnInit {
   }
 
   copyToClipboard(id: string) {
-    Plugins.Clipboard.write({ string: id });
+    this.isCopying = true;
+    Plugins.Clipboard.write({ string: id }).then(() =>
+      setTimeout(() => (this.isCopying = false), 500)
+    );
   }
 }

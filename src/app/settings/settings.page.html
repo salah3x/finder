@@ -33,7 +33,10 @@
             (click)="copyToClipboard(user.id)"
             title="Copy to clipboard"
           >
-            <ion-icon slot="icon-only" name="clipboard"></ion-icon>
+            <ion-icon
+              slot="icon-only"
+              [name]="isCopying ? 'done-all' : 'clipboard'"
+            ></ion-icon>
           </ion-button>
         </ion-item>
       </ion-col>
