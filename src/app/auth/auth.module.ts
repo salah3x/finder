@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { FirebaseUIModule, firebase } from 'firebaseui-angular';
+import { FirebaseUIModule, firebase, firebaseui } from 'firebaseui-angular';
 
 import { AuthPage } from './auth.page';
 
@@ -14,7 +14,7 @@ const routes: Routes = [
 ];
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
-  signInFlow: 'popup',
+  signInFlow: 'redirect',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     {

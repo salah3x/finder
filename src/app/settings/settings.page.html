@@ -5,10 +5,15 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid *ngIf="user$ | async as user">
-    <ion-row>
-      <ion-col size-md="6" offset-md="3" padding>
-        <ion-item>
+  <ion-grid>
+    <ion-row *ngIf="loading" text-center>
+      <ion-col>
+        <ion-spinner></ion-spinner>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="user$ | async as user">
+      <ion-col size-md="6" offset-md="3">
+        <ion-item lines="none" margin-vertical>
           <ion-avatar>
             <img [src]="user.photo || 'assets/user.png'" />
           </ion-avatar>
@@ -27,11 +32,7 @@
             Sign In
           </ion-button>
         </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-md="6" offset-md="3" padding>
-        <ion-item lines="none" color="light">
+        <ion-item color="light" lines="none" margin>
           <ion-label> <b>ID :</b> {{ user.id }} </ion-label>
           <ion-button
             slot="end"

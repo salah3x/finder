@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Plugins } from '@capacitor/core';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { User } from '../shared/models';
 import { StoreService } from '../shared/store.service';
@@ -14,6 +15,7 @@ import { StoreService } from '../shared/store.service';
 export class SettingsPage implements OnInit {
   user$: Observable<User>;
   isCopying = false;
+  loading = false;
 
   constructor(
     private store: StoreService,
@@ -21,7 +23,8 @@ export class SettingsPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.user$ = this.store.getUser();
+    this.loading = true;
+    this.user$ = this.store.getUser().pipe(tap(() => (this.loading = false)));
   }
 
   onSignOut() {
@@ -31,7 +34,7 @@ export class SettingsPage implements OnInit {
   copyToClipboard(id: string) {
     this.isCopying = true;
     Plugins.Clipboard.write({ string: id }).then(() =>
-      setTimeout(() => (this.isCopying = false), 500)
+      setTimeout(() => (this.isCopying = false), 750)
     );
   }
 }
