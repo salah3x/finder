@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
@@ -10,20 +10,27 @@ import { User, Friendship } from './models';
   providedIn: 'root'
 })
 export class StoreService {
-  private offlineUser = new BehaviorSubject<User>({
-    id: '123456789',
-    name: '',
-    photo: ''
-  });
-  private offlineFriends = new BehaviorSubject<User[]>([
-    { id: '123', name: 'salah', photo: '' },
-    { id: '1234', name: 'Test', photo: '' }
-  ]);
+  private offlineUser: BehaviorSubject<User>;
+  private offlineFriends: BehaviorSubject<User[]>;
 
   constructor(
     private authService: AngularFireAuth,
     private db: AngularFirestore
-  ) {}
+  ) {
+    const randomId = Math.random()
+      .toString(36)
+      .substr(2);
+    this.offlineUser = new BehaviorSubject<User>({
+      id: randomId,
+      name: 'Guest-' + randomId.slice(0, 4),
+      photo: '',
+      offline: true
+    });
+    this.offlineFriends = new BehaviorSubject<User[]>([
+      { id: '123', name: 'salah', photo: '' },
+      { id: '1234', name: 'Test', photo: '' }
+    ]);
+  }
 
   getUser() {
     return this.authService.user.pipe(

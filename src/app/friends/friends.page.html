@@ -39,7 +39,7 @@
             <ion-avatar slot="start">
               <ion-img [src]="friend.photo || 'assets/user.png'"></ion-img>
             </ion-avatar>
-            <ion-label text-center>{{ friend.name || 'Unknown' }}</ion-label>
+            <ion-label text-center>{{ friend.name }}</ion-label>
           </ion-item>
           <ion-item *ngIf="!friends?.length">
             <ion-label text-center>

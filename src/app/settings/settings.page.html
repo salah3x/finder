@@ -13,10 +13,18 @@
             <img [src]="user.photo || 'assets/user.png'" />
           </ion-avatar>
           <ion-label text-center>
-            <b>{{ user.name || 'Unknown' }}</b>
+            <b>{{ user.name }}</b>
           </ion-label>
-          <ion-button slot="end" color="danger" (click)="onSignOut()">
+          <ion-button
+            *ngIf="!user.offline"
+            slot="end"
+            color="danger"
+            (click)="onSignOut()"
+          >
             Sign out
+          </ion-button>
+          <ion-button *ngIf="user.offline" slot="end" routerLink="/auth">
+            Sign In
           </ion-button>
         </ion-item>
       </ion-col>

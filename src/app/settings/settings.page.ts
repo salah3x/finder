@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Plugins } from '@capacitor/core';
 import { Observable } from 'rxjs';
@@ -18,8 +17,7 @@ export class SettingsPage implements OnInit {
 
   constructor(
     private store: StoreService,
-    private authService: AngularFireAuth,
-    private navCtrl: NavController
+    private authService: AngularFireAuth
   ) {}
 
   ngOnInit() {
@@ -27,9 +25,7 @@ export class SettingsPage implements OnInit {
   }
 
   onSignOut() {
-    this.authService.auth
-      .signOut()
-      .then(() => this.navCtrl.navigateBack(['/tabs/map']));
+    this.authService.auth.signOut();
   }
 
   copyToClipboard(id: string) {
