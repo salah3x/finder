@@ -17,7 +17,6 @@ export const AddUser = functions.auth
       ) {
         return;
       }
-      console.log(user);
       const newUser = {
         id: user.uid,
         name: user.displayName,
@@ -31,4 +30,14 @@ export const AddUser = functions.auth
         .then(() => console.log('User saved to database'))
         .catch(err => console.error('An error occured', err));
     }
+  );
+
+export const DeleteUser = functions.auth
+  .user()
+  .onDelete((user: functions.auth.UserRecord, _: functions.EventContext) =>
+    db
+      .doc(`users/${user.uid}`)
+      .delete()
+      .then(() => console.log('User deleted'))
+      .catch(err => console.error('An error occured', err))
   );
