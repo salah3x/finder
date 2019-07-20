@@ -43,15 +43,14 @@
             <ion-note
               *ngIf="(friend.friendship?.date?.toDate() | timeAgo) !== 'now'"
               slot="end"
-              margin-vertical
               >{{ friend.friendship?.date?.toDate() | timeAgo }}</ion-note
             >
             <ion-icon
               *ngIf="(friend.friendship?.date?.toDate() | timeAgo) === 'now'"
+              name="wifi"
               slot="end"
               color="success"
               mode="md"
-              name="wifi"
             ></ion-icon>
           </ion-item>
           <ion-item *ngIf="!friends?.length">
