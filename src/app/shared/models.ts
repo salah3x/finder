@@ -2,11 +2,14 @@ export interface User {
   id: string;
   name: string;
   photo: string;
+  friendship?: {
+    id: string;
+    date: firebase.firestore.Timestamp;
+  };
 }
 
 export interface Friendship {
-  user1: string;
-  user2: string;
+  members: string[];
   since: firebase.firestore.Timestamp;
 }
 

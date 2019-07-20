@@ -1,7 +1,49 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon slot="icon-only" name="notifications"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title text-center>Friends</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngIf="loading" size-md="6" offset-md="3" text-center>
+        <ion-spinner></ion-spinner>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-md="6" offset-md="3">
+        <ion-list *ngIf="friends$ | async as friends">
+          <ion-item
+            (click)="showActionSheet(friend)"
+            *ngFor="let friend of friends"
+            button
+          >
+            <ion-avatar slot="start">
+              <ion-img [src]="friend.photo || 'assets/user.png'"></ion-img>
+            </ion-avatar>
+            <ion-label text-center>{{ friend.name || 'Unknown' }}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="!friends?.length">
+            <ion-label text-center>
+              <p>Nothing found!</p>
+              <p>
+                Click the (+) icon to add new friends
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,12 +1,98 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import {
+  AlertController,
+  LoadingController,
+  ActionSheetController
+} from '@ionic/angular';
+import { Observable, Subject } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+
+import { StoreService } from '../shared/store.service';
+import { User } from '../shared/models';
 
 @Component({
   selector: 'app-friends',
   templateUrl: './friends.page.html',
   styleUrls: ['./friends.page.scss']
 })
-export class FriendsPage implements OnInit {
-  constructor() {}
+export class FriendsPage implements OnInit, AfterViewInit {
+  friends$: Observable<User[]>;
+  searchTerm = new Subject<string>();
+  loading = false;
 
-  ngOnInit() {}
+  constructor(
+    private store: StoreService,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private actionSheetController: ActionSheetController
+  ) {}
+
+  ngOnInit() {
+    this.friends$ = this.searchTerm.pipe(
+      switchMap(s => this.store.getFriends(s)),
+      tap(() => (this.loading = false))
+    );
+  }
+
+  ngAfterViewInit() {
+    this.loading = true;
+    this.search('');
+  }
+
+  search(s: string) {
+    this.searchTerm.next(s);
+  }
+
+  async showActionSheet(friend: User) {
+    const actionSheet = await this.actionSheetController.create({
+      buttons: [
+        {
+          text: 'Find on Map',
+          icon: 'pin'
+        },
+        {
+          text: 'Unfriend',
+          role: 'destructive',
+          icon: 'trash',
+          handler: this.unFriend.bind(this, friend)
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
+  }
+
+  private async unFriend(friend: User) {
+    const alert = await this.alertCtrl.create({
+      header: 'Are you sure?',
+      message: `Do you want to unfriend ${friend.name}?`,
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel '
+        },
+        {
+          text: 'Yes',
+          handler: async () => {
+            const loader = await this.loadingCtrl.create({
+              message: `Unfriending ${friend.name}`
+            });
+            await loader.present();
+            this.store.unFriend(friend.friendship.id).subscribe(
+              () => loader.dismiss(),
+              err => {
+                loader.dismiss();
+                console.error('Unfriending failed: ', err);
+              }
+            );
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 }
