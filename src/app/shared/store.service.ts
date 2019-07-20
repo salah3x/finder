@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { firestore } from 'firebase/app';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import { switchMap, take, map, tap } from 'rxjs/operators';
 
@@ -27,8 +28,18 @@ export class StoreService {
       offline: true
     });
     this.offlineFriends = new BehaviorSubject<User[]>([
-      { id: '123', name: 'salah', photo: '' },
-      { id: '1234', name: 'Test', photo: '' }
+      {
+        id: '123',
+        name: 'salah',
+        photo: '',
+        friendship: { id: '5645', date: firestore.Timestamp.now() }
+      },
+      {
+        id: '1234',
+        name: 'Test',
+        photo: '',
+        friendship: { id: '9842', date: firestore.Timestamp.now() }
+      }
     ]);
   }
 
