@@ -18,12 +18,10 @@ export class StoreService {
     private authService: AngularFireAuth,
     private db: AngularFirestore
   ) {
-    const randomId = Math.random()
-      .toString(36)
-      .substr(2);
+    const randomId = db.createId();
     this.offlineUser = new BehaviorSubject<User>({
       id: randomId,
-      name: 'Guest-' + randomId.slice(0, 4),
+      name: 'Guest_' + randomId.slice(0, 4),
       photo: '',
       offline: true
     });
