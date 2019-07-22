@@ -35,11 +35,11 @@ export class FriendsPage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.loading = true;
     this.search('');
   }
 
   search(s: string) {
+    this.loading = true;
     this.searchTerm.next(s);
   }
 
