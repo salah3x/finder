@@ -14,13 +14,14 @@ const routes: Routes = [
 ];
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
-  signInFlow: 'redirect',
+  signInFlow: 'popup',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     {
       provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
     }
-  ]
+  ],
+  credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
 };
 
 @NgModule({
