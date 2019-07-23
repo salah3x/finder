@@ -5,7 +5,7 @@ import { firestore } from 'firebase/app';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import { switchMap, take, map, tap } from 'rxjs/operators';
 
-import { User, Friendship } from './models';
+import { User, Friendship, Request } from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -127,7 +127,37 @@ export class StoreService {
 
   addFriend(id: string) {}
 
-  getRequests() {}
+  getRequests() {
+    return this.authService.user.pipe(
+      switchMap(user =>
+        this.db
+          .collection<Request>('requests', ref =>
+            ref.where('to', '==', user.uid).orderBy('timestamp', 'desc')
+          )
+          .valueChanges({ idField: 'id' })
+      ),
+      switchMap(requests =>
+        requests.length === 0
+          ? of([])
+          : combineLatest(
+              requests.map(req =>
+                this.db
+                  .doc<User>(`users/${req.from}`)
+                  .valueChanges()
+                  .pipe(
+                    map(
+                      user =>
+                        ({
+                          ...user,
+                          friendship: { id: req.id, date: req.timestamp }
+                        } as User)
+                    )
+                  )
+              )
+            )
+      )
+    );
+  }
 
   acceptRequest(request: Request) {}
 

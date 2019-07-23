@@ -17,5 +17,5 @@ export interface Friendship {
 export interface Request {
   from: string;
   to: string;
-  accepted: boolean;
+  timestamp: firebase.firestore.Timestamp;
 }

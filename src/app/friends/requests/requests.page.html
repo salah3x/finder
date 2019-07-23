@@ -7,4 +7,42 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <ion-grid>
+    <ion-row *ngIf="loading">
+      <ion-col size-md="6" offset-md="3" text-center>
+        <ion-spinner></ion-spinner>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-md="6" offset-md="3">
+        <ion-list *ngIf="users$ | async as users">
+          <ion-item-sliding *ngFor="let user of users">
+            <ion-item>
+              <ion-avatar slot="start">
+                <ion-img [src]="user.photo || 'assets/user.png'"></ion-img>
+              </ion-avatar>
+              <ion-label text-center>{{ user.name }}</ion-label>
+              <ion-note slot="end">{{
+                user.friendship?.date?.toDate() | timeAgo
+              }}</ion-note>
+            </ion-item>
+            <ion-item-options side="end">
+              <ion-item-option color="success">
+                <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+              </ion-item-option>
+              <ion-item-option color="danger">
+                <ion-icon slot="icon-only" name="trash"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+          <ion-item *ngIf="!users?.length && !loading">
+            <ion-label text-center>
+              <p>You don't have any requests for now.</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
