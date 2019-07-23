@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { FriendsPage } from './friends.page';
-import { TimeAgoPipe } from '../shared/time-ago.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -18,7 +18,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, IonicModule, RouterModule.forChild(routes)],
-  declarations: [FriendsPage, TimeAgoPipe]
+  imports: [
+    CommonModule,
+    IonicModule,
+    RouterModule.forChild(routes),
+    SharedModule
+  ],
+  declarations: [FriendsPage]
 })
 export class FriendsPageModule {}
