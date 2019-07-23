@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { firestore } from 'firebase/app';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
-import { switchMap, take, map, tap } from 'rxjs/operators';
+import { combineLatest, of, Observable } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
 
 import { User, Friendship, Request } from './models';
 
@@ -11,42 +10,15 @@ import { User, Friendship, Request } from './models';
   providedIn: 'root'
 })
 export class StoreService {
-  private offlineUser: BehaviorSubject<User>;
-  private offlineFriends: BehaviorSubject<User[]>;
-
   constructor(
     private authService: AngularFireAuth,
     private db: AngularFirestore
-  ) {
-    const randomId = db.createId();
-    this.offlineUser = new BehaviorSubject<User>({
-      id: randomId,
-      name: 'Guest_' + randomId.slice(0, 4),
-      photo: '',
-      offline: true
-    });
-    this.offlineFriends = new BehaviorSubject<User[]>([
-      {
-        id: '123',
-        name: 'salah',
-        photo: '',
-        friendship: { id: '5645', date: firestore.Timestamp.now() }
-      },
-      {
-        id: '1234',
-        name: 'Test',
-        photo: '',
-        friendship: { id: '9842', date: firestore.Timestamp.now() }
-      }
-    ]);
-  }
+  ) {}
 
-  getUser() {
+  getUser(): Observable<User | null> {
     return this.authService.user.pipe(
       switchMap(user =>
-        user
-          ? this.db.doc<User>(`users/${user.uid}`).valueChanges()
-          : this.offlineUser.asObservable()
+        user ? this.db.doc<User>(`users/${user.uid}`).valueChanges() : of(null)
       )
     );
   }
@@ -93,7 +65,7 @@ export class StoreService {
                       )
                 )
               )
-          : this.offlineFriends.asObservable()
+          : of([])
       ),
       map(users => {
         if (search && search.trim()) {
@@ -107,22 +79,7 @@ export class StoreService {
   }
 
   unFriend(id: string) {
-    return this.authService.user.pipe(
-      take(1),
-      switchMap(user =>
-        user
-          ? this.db.doc(`friendships/${id}`).delete()
-          : this.offlineFriends.pipe(
-              take(1),
-              tap(friends =>
-                this.offlineFriends.next(
-                  friends.filter(f => f.friendship.id !== id)
-                )
-              ),
-              map(() => {})
-            )
-      )
-    );
+    return this.db.doc(`friendships/${id}`).delete();
   }
 
   addFriend(id: string) {}
@@ -130,11 +87,13 @@ export class StoreService {
   getRequests() {
     return this.authService.user.pipe(
       switchMap(user =>
-        this.db
-          .collection<Request>('requests', ref =>
-            ref.where('to', '==', user.uid).orderBy('timestamp', 'desc')
-          )
-          .valueChanges({ idField: 'id' })
+        user
+          ? this.db
+              .collection<Request>('requests', ref =>
+                ref.where('to', '==', user.uid).orderBy('timestamp', 'desc')
+              )
+              .valueChanges({ idField: 'id' })
+          : of([])
       ),
       switchMap(requests =>
         requests.length === 0

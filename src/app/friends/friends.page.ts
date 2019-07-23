@@ -82,13 +82,13 @@ export class FriendsPage implements OnInit, AfterViewInit {
               message: `Unfriending ${friend.name}`
             });
             await loader.present();
-            this.store.unFriend(friend.friendship.id).subscribe(
-              () => loader.dismiss(),
-              err => {
-                loader.dismiss();
-                console.error('Unfriending failed: ', err);
-              }
-            );
+            try {
+              await this.store.unFriend(friend.friendship.id);
+            } catch (err) {
+              console.error('Unfriending failed: ', err);
+            } finally {
+              await loader.dismiss();
+            }
           }
         }
       ]

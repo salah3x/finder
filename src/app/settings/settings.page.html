@@ -11,7 +11,7 @@
         <ion-spinner></ion-spinner>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="user$ | async as user">
+    <ion-row *ngIf="user$ | async as user; else login">
       <ion-col size-md="6" offset-md="3">
         <ion-item lines="none" margin-vertical>
           <ion-avatar>
@@ -20,16 +20,8 @@
           <ion-label text-center>
             <b>{{ user.name }}</b>
           </ion-label>
-          <ion-button
-            *ngIf="!user.offline"
-            slot="end"
-            color="danger"
-            (click)="onSignOut()"
-          >
+          <ion-button slot="end" color="danger" (click)="onSignOut()">
             Sign out
-          </ion-button>
-          <ion-button *ngIf="user.offline" slot="end" routerLink="/auth">
-            Sign In
           </ion-button>
         </ion-item>
         <ion-item color="light" lines="none" margin>
@@ -50,6 +42,22 @@
         </ion-item>
       </ion-col>
     </ion-row>
+    <ng-template #login>
+      <ion-row padding *ngIf="!loading">
+        <ion-col size-md="6" offset-md="3" padding>
+          <ion-text padding text-center>
+            <h1>You are not signed in</h1>
+            <p>
+              You have to sign in first to be able to add friends and share your
+              location.
+            </p>
+          </ion-text>
+          <ion-button routerLink="/auth" *ngIf="!loading" expand="block">
+            Sign In
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ng-template>
   </ion-grid>
 </ion-content>
 <ion-footer text-center padding>

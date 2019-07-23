@@ -2,7 +2,6 @@ export interface User {
   id: string;
   name: string;
   photo: string;
-  offline?: boolean;
   friendship?: {
     id: string;
     date: firebase.firestore.Timestamp;
