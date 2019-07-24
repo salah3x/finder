@@ -73,10 +73,14 @@ export class AddFriendsPage implements OnInit, AfterViewInit {
         {
           text: 'Yes',
           handler: async () => {
+            const loader = await this.loadingCtrl.create({
+              message: `Sending request to ${friend.name}...`
+            });
+            await loader.present();
             if (!(await this.store.canSendRequest(friend.id))) {
-              await (await this.alertCtrl.create({
+              const alert2 = await this.alertCtrl.create({
                 header: 'Error',
-                message: `You are either friend with or already sent or received a request from ${
+                message: `You are either friends with or already sent or received a request from ${
                   friend.name
                 }`,
                 buttons: [
@@ -85,13 +89,11 @@ export class AddFriendsPage implements OnInit, AfterViewInit {
                     role: 'cancel '
                   }
                 ]
-              })).present();
+              });
+              await loader.dismiss();
+              await alert2.present();
               return;
             }
-            const loader = await this.loadingCtrl.create({
-              message: `Sending request to ${friend.name}...`
-            });
-            await loader.present();
             try {
               await this.store.addFriend(friend.id);
             } catch (err) {
