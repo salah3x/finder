@@ -1,16 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-button routerLink="/tabs/friends/requests">
-        <ion-icon slot="icon-only" name="notifications"></ion-icon>
-      </ion-button>
+      <ion-back-button defaultHref="/tabs/friends"></ion-back-button>
     </ion-buttons>
-    <ion-title text-center>Friends</ion-title>
-    <ion-buttons slot="end">
-      <ion-button routerLink="/tabs/friends/add">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-title>Add friends</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -20,7 +13,17 @@
       <ion-col size-md="6" offset-md="3">
         <ion-searchbar
           (ionChange)="search($event.detail.value)"
+          #searchBar
         ></ion-searchbar>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!searchBar.value">
+      <ion-col size-md="6" offset-md="3">
+        <ion-item>
+          <ion-label text-center>
+            <p>Type something in the search bar!</p>
+          </ion-label>
+        </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -40,25 +43,10 @@
               <ion-img [src]="friend.photo || 'assets/user.png'"></ion-img>
             </ion-avatar>
             <ion-label text-center>{{ friend.name }}</ion-label>
-            <ion-note
-              *ngIf="(friend.friendship?.date?.toDate() | timeAgo) !== 'now'"
-              slot="end"
-              >{{ friend.friendship?.date?.toDate() | timeAgo }}</ion-note
-            >
-            <ion-icon
-              *ngIf="(friend.friendship?.date?.toDate() | timeAgo) === 'now'"
-              name="wifi"
-              slot="end"
-              color="success"
-              mode="md"
-            ></ion-icon>
           </ion-item>
-          <ion-item *ngIf="!friends?.length">
+          <ion-item *ngIf="!friends?.length && !loading && searchBar.value">
             <ion-label text-center>
               <p>Nothing found!</p>
-              <p>
-                Click the (+) icon to add new friends
-              </p>
             </ion-label>
           </ion-item>
         </ion-list>
@@ -66,3 +54,7 @@
     </ion-row>
   </ion-grid>
 </ion-content>
+
+<ion-footer text-center>
+  <p class="footer">Slide to right</p>
+</ion-footer>

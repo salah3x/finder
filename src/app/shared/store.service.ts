@@ -146,4 +146,79 @@ export class StoreService {
   declineRequest(id: string): Promise<void> {
     return this.db.doc<Request>(`requests/${id}`).delete();
   }
+
+  searchForFriends(keyword: string): Observable<User[]> {
+    keyword = keyword.trim().toLowerCase();
+    return this.authService.user.pipe(
+      switchMap(user =>
+        !keyword
+          ? of([] as User[])
+          : this.db
+              .collection<User>('users', ref =>
+                ref
+                  .orderBy('name_lowercase')
+                  .startAt(keyword)
+                  .endAt(keyword + '\uf8ff')
+              )
+              .valueChanges({ idField: 'id' })
+              .pipe(map(users => users.filter(u => u.id !== user.uid)))
+      )
+    );
+  }
+
+  addFriend(id: string): Promise<firestore.DocumentReference> {
+    return this.authService.user
+      .pipe(
+        take(1),
+        switchMap(user =>
+          this.db.collection<Request>('requests').add({
+            from: user.uid,
+            to: id,
+            timestamp: firestore.Timestamp.now()
+          })
+        )
+      )
+      .toPromise();
+  }
+
+  canSendRequest(id: string): Promise<boolean> {
+    return this.authService.user
+      .pipe(
+        take(1),
+        switchMap(user =>
+          combineLatest([
+            this.db
+              .collection('friendships', ref =>
+                ref.where('members', '==', [user.uid, id])
+              )
+              .valueChanges(),
+            this.db
+              .collection('friendships', ref =>
+                ref.where('members', '==', [id, user.uid])
+              )
+              .valueChanges(),
+            this.db
+              .collection('requests', ref =>
+                ref.where('from', '==', id).where('to', '==', user.uid)
+              )
+              .valueChanges(),
+            this.db
+              .collection('requests', ref =>
+                ref.where('to', '==', id).where('from', '==', user.uid)
+              )
+              .valueChanges()
+          ]).pipe(
+            take(1),
+            map(
+              docs =>
+                docs[0]
+                  .concat(docs[1])
+                  .concat(docs[2])
+                  .concat(docs[3]).length === 0
+            )
+          )
+        )
+      )
+      .toPromise();
+  }
 }

@@ -14,6 +14,10 @@ const routes: Routes = [
   {
     path: 'requests',
     loadChildren: './requests/requests.module#RequestsPageModule'
+  },
+  {
+    path: 'add',
+    loadChildren: './add-friends/add-friends.module#AddFriendsPageModule'
   }
 ];
 
