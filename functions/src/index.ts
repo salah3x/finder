@@ -19,8 +19,9 @@ export const AddUser = functions.auth
       }
       const newUser = {
         id: user.uid,
-        name: user.displayName,
-        photo: user.photoURL,
+        name: user.displayName || '',
+        name_lowercase: user.displayName ? user.displayName.toLowerCase() : '',
+        photo: user.photoURL || '',
         eventId: ctx.eventId
       };
       return db

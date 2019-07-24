@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { firestore } from 'firebase/app';
 import { combineLatest, of, Observable } from 'rxjs';
-import { switchMap, map, take } from 'rxjs/operators';
+import { switchMap, map, take, tap } from 'rxjs/operators';
 
 import { User, Friendship, Request } from './models';
 
@@ -71,7 +71,7 @@ export class StoreService {
       map(users => {
         if (search && search.trim()) {
           return users.filter(u =>
-            u.name.toLowerCase().includes(search.trim().toLowerCase())
+            u.name_lowercase.includes(search.trim().toLowerCase())
           );
         }
         return users;
@@ -82,8 +82,6 @@ export class StoreService {
   unFriend(id: string) {
     return this.db.doc(`friendships/${id}`).delete();
   }
-
-  addFriend(id: string) {}
 
   /**
    * If field === 'form', the method return the list of sent requests,

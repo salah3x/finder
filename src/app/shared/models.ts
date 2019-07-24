@@ -1,6 +1,7 @@
 export interface User {
   id: string;
   name: string;
+  name_lowercase: string;
   photo: string;
   friendship?: {
     id: string;
