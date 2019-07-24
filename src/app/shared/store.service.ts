@@ -221,4 +221,8 @@ export class StoreService {
       )
       .toPromise();
   }
+
+  updateUsername(id: string, name: string) {
+    this.db.doc<User>(`users/${id}`).update({ name });
+  }
 }

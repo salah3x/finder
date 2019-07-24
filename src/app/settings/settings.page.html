@@ -40,6 +40,22 @@
             ></ion-icon>
           </ion-button>
         </ion-item>
+        <ion-item text-center padding-top padding-horizontal>
+          <ion-label color="medium">
+            Customize your profile
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none" margin>
+          <ion-label>Change your name</ion-label>
+          <ion-button
+            slot="end"
+            color="primary"
+            fill="outline"
+            (click)="onChangeName(user.id, user.name)"
+          >
+            <ion-icon slot="icon-only" name="create"></ion-icon>
+          </ion-button>
+        </ion-item>
       </ion-col>
     </ion-row>
     <ng-template #login>
