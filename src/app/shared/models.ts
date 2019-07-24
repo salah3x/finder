@@ -6,6 +6,12 @@ export interface User {
     id: string;
     date: firebase.firestore.Timestamp;
   };
+  request?: {
+    id: string;
+    date: firebase.firestore.Timestamp;
+    accepted: boolean;
+    sentByMe: boolean;
+  };
 }
 
 export interface Friendship {
@@ -17,4 +23,5 @@ export interface Request {
   from: string;
   to: string;
   timestamp: firebase.firestore.Timestamp;
+  accepted: boolean;
 }

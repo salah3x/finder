@@ -15,7 +15,7 @@ export class StoreService {
     private db: AngularFirestore
   ) {}
 
-  getUser(): Observable<User | null> {
+  getUser(): Observable<User> {
     return this.authService.user.pipe(
       switchMap(user =>
         user ? this.db.doc<User>(`users/${user.uid}`).valueChanges() : of(null)
@@ -44,7 +44,7 @@ export class StoreService {
                 ),
                 switchMap(friends =>
                   friends.length === 0
-                    ? of([])
+                    ? of([] as User[])
                     : combineLatest(
                         friends.map(friend =>
                           this.db
@@ -65,7 +65,7 @@ export class StoreService {
                       )
                 )
               )
-          : of([])
+          : of([] as User[])
       ),
       map(users => {
         if (search && search.trim()) {
@@ -84,36 +84,54 @@ export class StoreService {
 
   addFriend(id: string) {}
 
-  getRequests() {
+  /**
+   * If field === 'form', the method return the list of sent requests,
+   * else it returns the list of received ones.
+   *
+   * @param field The field that shoud match the logged in user id
+   */
+  getRequests(field: 'from' | 'to'): Observable<User[]> {
     return this.authService.user.pipe(
       switchMap(user =>
         user
           ? this.db
               .collection<Request>('requests', ref =>
-                ref.where('to', '==', user.uid).orderBy('timestamp', 'desc')
+                ref
+                  .where(field, '==', user.uid)
+                  .orderBy('accepted')
+                  .orderBy('timestamp', 'desc')
               )
               .valueChanges({ idField: 'id' })
-          : of([])
-      ),
-      switchMap(requests =>
-        requests.length === 0
-          ? of([])
-          : combineLatest(
-              requests.map(req =>
-                this.db
-                  .doc<User>(`users/${req.from}`)
-                  .valueChanges()
-                  .pipe(
-                    map(
-                      user =>
-                        ({
-                          ...user,
-                          friendship: { id: req.id, date: req.timestamp }
-                        } as User)
-                    )
-                  )
+              .pipe(
+                switchMap(requests =>
+                  requests.length === 0
+                    ? of([] as User[])
+                    : combineLatest(
+                        requests.map(req =>
+                          this.db
+                            .doc<User>(
+                              `users/${field === 'from' ? req.to : req.from}`
+                            )
+                            .valueChanges()
+                            .pipe(
+                              map(
+                                u =>
+                                  ({
+                                    ...u,
+                                    request: {
+                                      id: req.id,
+                                      date: req.timestamp,
+                                      accepted: req.accepted,
+                                      sentByMe: field === 'from'
+                                    }
+                                  } as User)
+                              )
+                            )
+                        )
+                      )
+                )
               )
-            )
+          : of([] as User[])
       )
     );
   }
@@ -121,4 +139,6 @@ export class StoreService {
   acceptRequest(request: Request) {}
 
   declineRequest(id: string) {}
+
+  cancelRequest(id: string) {}
 }

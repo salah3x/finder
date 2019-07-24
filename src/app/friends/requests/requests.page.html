@@ -9,7 +9,22 @@
 
 <ion-content>
   <ion-grid>
-    <ion-row *ngIf="loading">
+    <ion-row padding-bottom>
+      <ion-col>
+        <ion-segment
+          (ionChange)="segmentChanged($event.detail.value)"
+          value="to"
+        >
+          <ion-segment-button value="to">
+            <ion-label>Received</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="from">
+            <ion-label>Sent</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="loading" padding-top>
       <ion-col size-md="6" offset-md="3" text-center>
         <ion-spinner></ion-spinner>
       </ion-col>
@@ -17,22 +32,27 @@
     <ion-row>
       <ion-col size-md="6" offset-md="3">
         <ion-list *ngIf="users$ | async as users">
-          <ion-item-sliding *ngFor="let user of users">
-            <ion-item>
+          <ion-item-sliding
+            *ngFor="let user of users"
+            [disabled]="user.request.accepted"
+          >
+            <ion-item *ngIf="!loading" [disabled]="user.request.accepted">
               <ion-avatar slot="start">
                 <ion-img [src]="user.photo || 'assets/user.png'"></ion-img>
               </ion-avatar>
               <ion-label text-center>{{ user.name }}</ion-label>
               <ion-note slot="end">{{
-                user.friendship?.date?.toDate() | timeAgo
+                user.request?.date?.toDate() | timeAgo
               }}</ion-note>
             </ion-item>
-            <ion-item-options side="end">
+            <ion-item-options side="start" *ngIf="!user.request.sentByMe">
               <ion-item-option color="success">
                 <ion-icon slot="icon-only" name="checkmark"></ion-icon>
               </ion-item-option>
+            </ion-item-options>
+            <ion-item-options side="end">
               <ion-item-option color="danger">
-                <ion-icon slot="icon-only" name="trash"></ion-icon>
+                <ion-icon slot="icon-only" name="close"></ion-icon>
               </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
@@ -46,3 +66,6 @@
     </ion-row>
   </ion-grid>
 </ion-content>
+<ion-footer text-center>
+  <p class="footer">Slide to left or right</p>
+</ion-footer>
