@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { firestore } from 'firebase/app';
 import { combineLatest, of, Observable } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, take } from 'rxjs/operators';
 
 import { User, Friendship, Request } from './models';
 
@@ -96,10 +97,7 @@ export class StoreService {
         user
           ? this.db
               .collection<Request>('requests', ref =>
-                ref
-                  .where(field, '==', user.uid)
-                  .orderBy('accepted')
-                  .orderBy('timestamp', 'desc')
+                ref.where(field, '==', user.uid).orderBy('timestamp', 'desc')
               )
               .valueChanges({ idField: 'id' })
               .pipe(
@@ -121,7 +119,6 @@ export class StoreService {
                                     request: {
                                       id: req.id,
                                       date: req.timestamp,
-                                      accepted: req.accepted,
                                       sentByMe: field === 'from'
                                     }
                                   } as User)
@@ -136,9 +133,19 @@ export class StoreService {
     );
   }
 
-  acceptRequest(request: Request) {}
+  async acceptRequest(id: string, user: string): Promise<void> {
+    const u = await this.authService.user.pipe(take(1)).toPromise();
+    return await this.db.firestore
+      .batch()
+      .set(this.db.doc<Friendship>(`friendships/${this.db.createId()}`).ref, {
+        since: firestore.Timestamp.now(),
+        members: [u.uid, user]
+      } as Friendship)
+      .delete(this.db.doc<Request>(`requests/${id}`).ref)
+      .commit();
+  }
 
-  declineRequest(id: string) {}
-
-  cancelRequest(id: string) {}
+  declineRequest(id: string): Promise<void> {
+    return this.db.doc<Request>(`requests/${id}`).delete();
+  }
 }

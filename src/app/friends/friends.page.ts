@@ -79,7 +79,7 @@ export class FriendsPage implements OnInit, AfterViewInit {
           text: 'Yes',
           handler: async () => {
             const loader = await this.loadingCtrl.create({
-              message: `Unfriending ${friend.name}`
+              message: `Unfriending ${friend.name}...`
             });
             await loader.present();
             try {

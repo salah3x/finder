@@ -9,7 +9,6 @@ export interface User {
   request?: {
     id: string;
     date: firebase.firestore.Timestamp;
-    accepted: boolean;
     sentByMe: boolean;
   };
 }
@@ -23,5 +22,4 @@ export interface Request {
   from: string;
   to: string;
   timestamp: firebase.firestore.Timestamp;
-  accepted: boolean;
 }

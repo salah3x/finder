@@ -32,11 +32,8 @@
     <ion-row>
       <ion-col size-md="6" offset-md="3">
         <ion-list *ngIf="users$ | async as users">
-          <ion-item-sliding
-            *ngFor="let user of users"
-            [disabled]="user.request.accepted"
-          >
-            <ion-item *ngIf="!loading" [disabled]="user.request.accepted">
+          <ion-item-sliding *ngFor="let user of users">
+            <ion-item *ngIf="!loading">
               <ion-avatar slot="start">
                 <ion-img [src]="user.photo || 'assets/user.png'"></ion-img>
               </ion-avatar>
@@ -46,12 +43,18 @@
               }}</ion-note>
             </ion-item>
             <ion-item-options side="start" *ngIf="!user.request.sentByMe">
-              <ion-item-option color="success">
+              <ion-item-option
+                color="success"
+                (click)="acceptRequest(user.request.id, user.id)"
+              >
                 <ion-icon slot="icon-only" name="checkmark"></ion-icon>
               </ion-item-option>
             </ion-item-options>
             <ion-item-options side="end">
-              <ion-item-option color="danger">
+              <ion-item-option
+                color="danger"
+                (click)="declineRequest(user.request.id, user.request.sentByMe)"
+              >
                 <ion-icon slot="icon-only" name="close"></ion-icon>
               </ion-item-option>
             </ion-item-options>
