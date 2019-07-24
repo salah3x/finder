@@ -45,27 +45,25 @@
             Customize your profile
           </ion-label>
         </ion-item>
-        <ion-item lines="none" margin>
+        <ion-item
+          lines="none"
+          (click)="onChangeName(user.id, user.name)"
+          margin
+          detail
+          button
+        >
           <ion-label>Change your name</ion-label>
-          <ion-button
-            slot="end"
-            color="primary"
-            fill="outline"
-            (click)="onChangeName(user.id, user.name)"
-          >
-            <ion-icon slot="icon-only" name="create"></ion-icon>
-          </ion-button>
+          <ion-icon slot="start" color="primary" name="create"></ion-icon>
         </ion-item>
-        <ion-item lines="none" margin>
+        <ion-item
+          lines="none"
+          routerLink="/tabs/settings/picture"
+          detail
+          button
+          margin
+        >
           <ion-label>Change your picture</ion-label>
-          <ion-button
-            slot="end"
-            color="primary"
-            fill="outline"
-            routerLink="/tabs/settings/picture"
-          >
-            <ion-icon slot="icon-only" name="camera"></ion-icon>
-          </ion-button>
+          <ion-icon slot="start" color="primary" name="camera"></ion-icon>
         </ion-item>
       </ion-col>
     </ion-row>
