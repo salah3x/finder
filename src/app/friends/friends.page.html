@@ -35,6 +35,7 @@
             (click)="showActionSheet(friend)"
             *ngFor="let friend of friends"
             button
+            margin-end
           >
             <ion-avatar slot="start">
               <ion-img [src]="friend.photo || 'assets/user.png'"></ion-img>
@@ -53,7 +54,7 @@
               mode="md"
             ></ion-icon>
           </ion-item>
-          <ion-item *ngIf="!friends?.length">
+          <ion-item *ngIf="!friends?.length" margin-end>
             <ion-label text-center>
               <p>Nothing found!</p>
               <p>

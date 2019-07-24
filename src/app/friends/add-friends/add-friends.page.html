@@ -19,7 +19,7 @@
     </ion-row>
     <ion-row *ngIf="!searchBar.value">
       <ion-col size-md="6" offset-md="3">
-        <ion-item>
+        <ion-item margin-end>
           <ion-label text-center>
             <p>Type something in the search bar!</p>
           </ion-label>
@@ -38,13 +38,17 @@
             (click)="showActionSheet(friend)"
             *ngFor="let friend of friends"
             button
+            margin-end
           >
             <ion-avatar slot="start">
               <ion-img [src]="friend.photo || 'assets/user.png'"></ion-img>
             </ion-avatar>
             <ion-label text-center>{{ friend.name }}</ion-label>
           </ion-item>
-          <ion-item *ngIf="!friends?.length && !loading && searchBar.value">
+          <ion-item
+            *ngIf="!friends?.length && !loading && searchBar.value"
+            margin-end
+          >
             <ion-label text-center>
               <p>Nothing found!</p>
             </ion-label>
