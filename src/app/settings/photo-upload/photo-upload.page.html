@@ -7,4 +7,22 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <ion-grid no-padding>
+    <ion-row *ngIf="loading">
+      <ion-col size-md="6" offset-md="3" text-center>
+        <ion-spinner margin-top></ion-spinner>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="user$ | async as user">
+      <ion-col size-md="6" offset-md="3" no-padding>
+        <ion-img [src]="user.photo || 'assets/user.png'"></ion-img>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-fab *ngIf="!loading" vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="onChooseImage()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
