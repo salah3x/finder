@@ -28,17 +28,56 @@ export const AddUser = functions.auth
         .collection('users')
         .doc(user.uid)
         .set(newUser)
-        .then(() => console.log('User saved to database'))
         .catch(err => console.error('An error occured', err));
     }
   );
 
-export const DeleteUser = functions.auth
-  .user()
-  .onDelete((user: functions.auth.UserRecord, _: functions.EventContext) =>
-    db
-      .doc(`users/${user.uid}`)
-      .delete()
-      .then(() => console.log('User deleted'))
-      .catch(err => console.error('An error occured', err))
-  );
+export const DeleteAccount = functions.https.onRequest(
+  async (req: functions.https.Request, res: functions.Response) => {
+    if (req.method !== 'DELETE') {
+      res.status(405).send({ message: 'Method Not Allowed' });
+      return;
+    }
+    if (!req.headers.authorization) {
+      res.status(401).send({ message: 'Unautorized' });
+      return;
+    }
+    let token: admin.auth.DecodedIdToken;
+    try {
+      token = await admin.auth().verifyIdToken(req.headers.authorization);
+    } catch (error) {
+      res.status(403).send({ message: 'Forbidden' });
+      return;
+    }
+    return db
+      .runTransaction(async tx => {
+        tx.delete(db.doc(`users/${token.uid}`));
+        const friendships = await tx.get(
+          db
+            .collection('friendships')
+            .where('members', 'array-contains', token.uid)
+        );
+        friendships.docs.forEach(doc => tx.delete(doc.ref));
+        const requestsFrom = await tx.get(
+          db.collection('requests').where('from', '==', token.uid)
+        );
+        requestsFrom.docs.forEach(doc => tx.delete(doc.ref));
+        friendships.docs.forEach(doc => tx.delete(doc.ref));
+        const requestsTo = await tx.get(
+          db.collection('requests').where('to', '==', token.uid)
+        );
+        requestsTo.docs.forEach(doc => tx.delete(doc.ref));
+        await admin.auth().deleteUser(token.uid);
+        await admin
+          .storage()
+          .bucket()
+          .file(`images/${token.uid}`)
+          .delete();
+      })
+      .then(() => res.status(200).send({ message: 'Account deleted' }))
+      .catch(err => {
+        console.error('Error deleting account: ', err);
+        res.status(500).send({ message: 'Internal Error', error: err });
+      });
+  }
+);

@@ -5,6 +5,10 @@
     "predeploy": ["npm run lint", "npm run build -- --prod"],
     "rewrites": [
       {
+        "source": "/api/DeleteAccount",
+        "function": "DeleteAccount"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
