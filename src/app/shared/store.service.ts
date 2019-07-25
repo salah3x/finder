@@ -225,4 +225,8 @@ export class StoreService {
   updateUsername(id: string, name: string) {
     this.db.doc<User>(`users/${id}`).update({ name });
   }
+
+  updatePhoto(id: string, photo: string) {
+    return this.db.doc<User>(`users/${id}`).update({ photo });
+  }
 }

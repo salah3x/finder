@@ -5,7 +5,7 @@ export const environment = {
     authDomain: 'finder-99.firebaseapp.com',
     databaseURL: 'https://finder-99.firebaseio.com',
     projectId: 'finder-99',
-    storageBucket: '',
+    storageBucket: 'finder-99.appspot.com',
     messagingSenderId: '141763848905',
     appId: '1:141763848905:web:a59d671cb1c3b5f7'
   }
