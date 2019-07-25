@@ -30,7 +30,7 @@ export class PhotoUploadService {
         tap(id => (userId = id)),
         switchMap(id =>
           this.storage
-            .ref(`images/${id}.${photo.format}`)
+            .ref(`images/${id}`)
             .put(this.dataURItoBlob(photo.dataUrl))
             .snapshotChanges()
         ),
