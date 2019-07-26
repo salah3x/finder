@@ -234,9 +234,14 @@ export class StoreService {
   }
 
   deleteAccount() {
-    return this.http
-      .delete<any>(`${environment.apiBaseUrl}/DeleteAccount`)
+    return this.authService.idToken
       .pipe(
+        take(1),
+        switchMap(token =>
+          this.http.delete<any>(`${environment.apiBaseUrl}/DeleteAccount`, {
+            headers: { Authorization: token }
+          })
+        ),
         map(_ => {}),
         catchError(err => {
           console.error(err);
