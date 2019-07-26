@@ -1,8 +1,10 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import * as cors from 'cors';
 
 admin.initializeApp();
 const db = admin.firestore();
+const corsHandler = cors({ origin: 'http://localhost:8100' });
 
 export const AddUser = functions.auth
   .user()
@@ -34,6 +36,8 @@ export const AddUser = functions.auth
 
 export const DeleteAccount = functions.https.onRequest(
   async (req: functions.https.Request, res: functions.Response) => {
+    // tslint:disable-next-line: no-empty
+    corsHandler(req, res, () => {});
     if (req.method !== 'DELETE') {
       res.status(405).send({ message: 'Method Not Allowed' });
       return;
