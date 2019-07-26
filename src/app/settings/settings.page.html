@@ -12,18 +12,21 @@
       </ion-col>
     </ion-row>
     <ion-row *ngIf="user$ | async as user; else login">
-      <ion-col size-md="6" offset-md="3">
-        <ion-item lines="none" margin-vertical>
+      <ion-col size-md="6" offset-md="3" text-center>
+        <ion-card color="light">
           <ion-avatar>
-            <img [src]="user.photo || 'assets/user.png'" />
+            <ion-img [src]="user.photo || 'assets/user.png'"></ion-img>
           </ion-avatar>
-          <ion-label text-center>
-            <b>{{ user.name }}</b>
-          </ion-label>
-          <ion-button slot="end" (click)="onSignOut()">
-            Sign out
-          </ion-button>
-        </ion-item>
+          <ion-card-header>
+            <ion-card-title>{{ user.name }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content no-padding>
+            <ion-button expand="block" color="dark" (click)="onSignOut()">
+              <ion-label>Sign out</ion-label>
+              <ion-icon name="log-out" slot="start"></ion-icon>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
         <ion-item color="light" lines="none" margin>
           <ion-label> <b>ID :</b> {{ user.id }} </ion-label>
           <ion-button
@@ -40,7 +43,7 @@
             ></ion-icon>
           </ion-button>
         </ion-item>
-        <ion-item text-center padding-top padding-horizontal>
+        <ion-item text-center padding-horizontal>
           <ion-label color="medium">
             Customize your profile
           </ion-label>
@@ -65,8 +68,12 @@
           <ion-label>Change your picture</ion-label>
           <ion-icon slot="start" color="primary" name="camera"></ion-icon>
         </ion-item>
-        <ion-item padding-bottom padding-horizontal> </ion-item>
-        <ion-button expand="block" color="danger" (click)="onDeleteAccount()">
+        <ion-button
+          expand="block"
+          color="danger"
+          (click)="onDeleteAccount()"
+          padding-horizontal
+        >
           <ion-label>Delete Account</ion-label>
           <ion-icon slot="start" name="trash"></ion-icon>
         </ion-button>
@@ -83,7 +90,8 @@
             </p>
           </ion-text>
           <ion-button routerLink="/auth" *ngIf="!loading" expand="block">
-            Sign In
+            <ion-label>Sign in</ion-label>
+            <ion-icon name="log-in" slot="start"></ion-icon>
           </ion-button>
         </ion-col>
       </ion-row>
