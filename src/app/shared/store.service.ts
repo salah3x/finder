@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { firestore } from 'firebase/app';
 import { combineLatest, of, Observable, throwError } from 'rxjs';
-import { switchMap, map, take, catchError } from 'rxjs/operators';
+import { switchMap, map, take, catchError, tap } from 'rxjs/operators';
 
 import { User, Friendship, Request } from './models';
 import { environment } from '../../environments/environment';
@@ -22,7 +22,21 @@ export class StoreService {
   getUser(): Observable<User> {
     return this.authService.user.pipe(
       switchMap(user =>
-        user ? this.db.doc<User>(`users/${user.uid}`).valueChanges() : of(null)
+        user
+          ? this.db
+              .doc<User>(`users/${user.uid}`)
+              .valueChanges()
+              .pipe(
+                tap(u => {
+                  if (!u.name) {
+                    this.db.doc<User>(`users/${u.id}`).update({
+                      name: user.displayName,
+                      name_lowercase: user.displayName.toLowerCase()
+                    });
+                  }
+                })
+              )
+          : of(null)
       )
     );
   }
