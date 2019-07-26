@@ -14,7 +14,8 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../map/map.module#MapPageModule'
+            loadChildren: () =>
+              import('../map/map.module').then(m => m.MapPageModule)
           }
         ]
       },
@@ -23,7 +24,10 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../friends/friends.module#FriendsPageModule',
+            loadChildren: () =>
+              import('../friends/friends.module').then(
+                m => m.FriendsPageModule
+              ),
             canActivate: [AuthGuard],
             canLoad: [AuthGuard]
           }
@@ -34,7 +38,10 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../settings/settings.module#SettingsPageModule'
+            loadChildren: () =>
+              import('../settings/settings.module').then(
+                m => m.SettingsPageModule
+              )
           }
         ]
       },

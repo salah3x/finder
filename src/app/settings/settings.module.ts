@@ -13,7 +13,10 @@ const routes: Routes = [
   },
   {
     path: 'picture',
-    loadChildren: './photo-upload/photo-upload.module#PhotoUploadPageModule'
+    loadChildren: () =>
+      import('./photo-upload/photo-upload.module').then(
+        m => m.PhotoUploadPageModule
+      )
   }
 ];
 

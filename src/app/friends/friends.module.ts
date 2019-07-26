@@ -13,11 +13,15 @@ const routes: Routes = [
   },
   {
     path: 'requests',
-    loadChildren: './requests/requests.module#RequestsPageModule'
+    loadChildren: () =>
+      import('./requests/requests.module').then(m => m.RequestsPageModule)
   },
   {
     path: 'add',
-    loadChildren: './add-friends/add-friends.module#AddFriendsPageModule'
+    loadChildren: () =>
+      import('./add-friends/add-friends.module').then(
+        m => m.AddFriendsPageModule
+      )
   }
 ];
 
