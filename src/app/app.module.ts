@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -19,6 +20,7 @@ import { environment } from '../environments/environment';
     IonicModule.forRoot(),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    HttpClientModule,
     AppRoutingModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],

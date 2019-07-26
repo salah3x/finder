@@ -55,8 +55,7 @@ export class SettingsPage implements OnInit {
       buttons: [
         {
           text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary'
+          role: 'cancel'
         },
         {
           text: 'Save',
@@ -77,6 +76,41 @@ export class SettingsPage implements OnInit {
       ]
     });
 
+    await alert.present();
+  }
+
+  async onDeleteAccount() {
+    const alert = await this.alertCtrl.create({
+      header: 'Are you sure?',
+      message: 'This will delete all your data permanently',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Delete',
+          handler: async () => {
+            const loader = await this.loadingCtrl.create({
+              message: 'Deleting account...'
+            });
+            await loader.present();
+            try {
+              await this.store.deleteAccount();
+              await this.onSignOut();
+              await loader.dismiss();
+            } catch (err) {
+              await loader.dismiss();
+              await (await this.alertCtrl.create({
+                header: 'Error',
+                message: err,
+                buttons: [{ text: 'Close', role: 'cancel' }]
+              })).present();
+            }
+          }
+        }
+      ]
+    });
     await alert.present();
   }
 }

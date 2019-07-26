@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { firestore } from 'firebase/app';
-import { combineLatest, of, Observable } from 'rxjs';
-import { switchMap, map, take, tap } from 'rxjs/operators';
+import { combineLatest, of, Observable, throwError } from 'rxjs';
+import { switchMap, map, take, catchError } from 'rxjs/operators';
 
 import { User, Friendship, Request } from './models';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,8 @@ import { User, Friendship, Request } from './models';
 export class StoreService {
   constructor(
     private authService: AngularFireAuth,
-    private db: AngularFirestore
+    private db: AngularFirestore,
+    private http: HttpClient
   ) {}
 
   getUser(): Observable<User> {
@@ -228,5 +231,18 @@ export class StoreService {
 
   updatePhoto(id: string, photo: string) {
     return this.db.doc<User>(`users/${id}`).update({ photo });
+  }
+
+  deleteAccount() {
+    return this.http
+      .delete<any>(`${environment.apiBaseUrl}/DeleteAccount`)
+      .pipe(
+        map(_ => {}),
+        catchError(err => {
+          console.error(err);
+          return throwError(err.error.message || 'Unknown');
+        })
+      )
+      .toPromise();
   }
 }

@@ -20,7 +20,7 @@
           <ion-label text-center>
             <b>{{ user.name }}</b>
           </ion-label>
-          <ion-button slot="end" color="danger" (click)="onSignOut()">
+          <ion-button slot="end" (click)="onSignOut()">
             Sign out
           </ion-button>
         </ion-item>
@@ -65,6 +65,11 @@
           <ion-label>Change your picture</ion-label>
           <ion-icon slot="start" color="primary" name="camera"></ion-icon>
         </ion-item>
+        <ion-item padding-bottom padding-horizontal> </ion-item>
+        <ion-button expand="block" color="danger" (click)="onDeleteAccount()">
+          <ion-label>Delete Account</ion-label>
+          <ion-icon slot="start" name="trash"></ion-icon>
+        </ion-button>
       </ion-col>
     </ion-row>
     <ng-template #login>
