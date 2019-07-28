@@ -259,4 +259,15 @@ export class StoreService {
       )
       .toPromise();
   }
+
+  async setSharing(sharing: boolean): Promise<void> {
+    return this.authService.user
+      .pipe(
+        take(1),
+        switchMap(user =>
+          this.db.doc<User>(`users/${user.uid}`).update({ isSharing: sharing })
+        )
+      )
+      .toPromise();
+  }
 }

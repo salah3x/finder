@@ -3,6 +3,7 @@ export interface User {
   name: string;
   name_lowercase: string;
   photo: string;
+  isSharing: boolean;
   friendship?: {
     id: string;
     date: firebase.firestore.Timestamp;

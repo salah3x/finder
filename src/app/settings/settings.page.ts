@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, IonToggle } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -17,6 +17,7 @@ export class SettingsPage implements OnInit {
   user$: Observable<User>;
   isCopying = false;
   loading = false;
+  echoing = false;
 
   constructor(
     private store: StoreService,
@@ -112,5 +113,29 @@ export class SettingsPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  async onChangeSharing(toggle: IonToggle) {
+    if (this.echoing) {
+      this.echoing = false;
+      return;
+    }
+    const loader = await this.loadingCtrl.create({
+      message: 'Saving changes...'
+    });
+    await loader.present();
+    try {
+      await this.store.setSharing(toggle.checked);
+      await loader.dismiss();
+    } catch (_) {
+      this.echoing = true;
+      toggle.checked = !toggle.checked;
+      await loader.dismiss();
+      await (await this.alertCtrl.create({
+        header: 'Error',
+        message: 'Please try again later',
+        buttons: [{ text: 'Close', role: 'cancel' }]
+      })).present();
+    }
   }
 }

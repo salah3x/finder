@@ -3,14 +3,10 @@
 }
 
 ion-avatar {
+  --border-radius: 30%;
   width: 50%;
   height: 50%;
   margin-left: 25%;
   margin-top: 10px;
   margin-bottom: 10px;
-}
-
-ion-card-header,
-ion-card-content {
-  background-color: var(--ion-color-primary-contrast);
 }
