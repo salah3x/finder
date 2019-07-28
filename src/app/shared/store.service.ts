@@ -29,10 +29,7 @@ export class StoreService {
               .pipe(
                 tap(u => {
                   if (!u.name) {
-                    this.db.doc<User>(`users/${u.id}`).update({
-                      name: user.displayName,
-                      name_lowercase: user.displayName.toLowerCase()
-                    });
+                    this.updateUsername(u.id, user.displayName);
                   }
                 })
               )
@@ -41,7 +38,7 @@ export class StoreService {
     );
   }
 
-  getFriends(search?: string) {
+  getFriends(search?: string): Observable<User[]> {
     return this.authService.user.pipe(
       switchMap(user =>
         user
@@ -96,7 +93,7 @@ export class StoreService {
     );
   }
 
-  unFriend(id: string) {
+  async unFriend(id: string): Promise<void> {
     return this.db.doc(`friendships/${id}`).delete();
   }
 
@@ -160,7 +157,7 @@ export class StoreService {
       .commit();
   }
 
-  declineRequest(id: string): Promise<void> {
+  async declineRequest(id: string): Promise<void> {
     return this.db.doc<Request>(`requests/${id}`).delete();
   }
 
@@ -183,7 +180,7 @@ export class StoreService {
     );
   }
 
-  addFriend(id: string): Promise<firestore.DocumentReference> {
+  async addFriend(id: string): Promise<firestore.DocumentReference> {
     return this.authService.user
       .pipe(
         take(1),
@@ -198,7 +195,7 @@ export class StoreService {
       .toPromise();
   }
 
-  canSendRequest(id: string): Promise<boolean> {
+  async canSendRequest(id: string): Promise<boolean> {
     return this.authService.user
       .pipe(
         take(1),
@@ -239,15 +236,13 @@ export class StoreService {
       .toPromise();
   }
 
-  updateUsername(id: string, name: string) {
-    this.db.doc<User>(`users/${id}`).update({ name });
+  async updateUsername(id: string, name: string): Promise<void> {
+    return this.db
+      .doc<User>(`users/${id}`)
+      .update({ name, name_lowercase: name.toLowerCase() });
   }
 
-  updatePhoto(id: string, photo: string) {
-    return this.db.doc<User>(`users/${id}`).update({ photo });
-  }
-
-  deleteAccount() {
+  async deleteAccount(): Promise<void> {
     return this.authService.idToken
       .pipe(
         take(1),
