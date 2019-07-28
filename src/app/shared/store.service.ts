@@ -3,20 +3,32 @@ import { HttpClient } from '@angular/common/http';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { firestore } from 'firebase/app';
-import { combineLatest, of, Observable, throwError } from 'rxjs';
+import { AlertController } from '@ionic/angular';
+import { Plugins } from '@capacitor/core';
+import {
+  combineLatest,
+  of,
+  Observable,
+  throwError,
+  Subscription,
+  timer
+} from 'rxjs';
 import { switchMap, map, take, catchError, tap } from 'rxjs/operators';
 
-import { User, Friendship, Request } from './models';
+import { User, Friendship, Request, Location } from './models';
 import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StoreService {
+  private subs: Subscription;
+
   constructor(
     private authService: AngularFireAuth,
     private db: AngularFirestore,
-    private http: HttpClient
+    private http: HttpClient,
+    private alertCtrl: AlertController
   ) {}
 
   getUser(): Observable<User> {
@@ -266,8 +278,52 @@ export class StoreService {
         take(1),
         switchMap(user =>
           this.db.doc<User>(`users/${user.uid}`).update({ isSharing: sharing })
-        )
+        ),
+        tap(() => {
+          this.subs.unsubscribe();
+          if (sharing) {
+            this.shareMyLocation();
+          }
+        })
       )
       .toPromise();
+  }
+
+  shareMyLocation() {
+    this.subs = this.getUser()
+      .pipe(
+        switchMap(user =>
+          user && user.isSharing
+            ? timer(0, 5000).pipe(
+                switchMap(_ => Plugins.Geolocation.getCurrentPosition()),
+                map(
+                  location =>
+                    ({
+                      userId: user.id,
+                      location: new firestore.GeoPoint(
+                        location.coords.latitude,
+                        location.coords.longitude
+                      ),
+                      date: firestore.Timestamp.now()
+                    } as Location)
+                ),
+                switchMap(location =>
+                  this.db
+                    .doc<Location>(`locations/${location.userId}`)
+                    .set(location)
+                ),
+                catchError(async err => {
+                  await (await this.alertCtrl.create({
+                    header: 'Error',
+                    message: err.message || 'Unknown',
+                    buttons: [{ text: 'Close', role: 'cancel' }]
+                  })).present();
+                  return of(null);
+                })
+              )
+            : of(null)
+        )
+      )
+      .subscribe();
   }
 }
