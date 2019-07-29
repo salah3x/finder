@@ -6,4 +6,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <agm-map [latitude]="33.277568" [longitude]="-7.579578">
+    <agm-marker [latitude]="33.277568" [longitude]="-7.579578">
+      <agm-info-window>Me</agm-info-window>
+    </agm-marker>
+  </agm-map>
+</ion-content>
