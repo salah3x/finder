@@ -289,7 +289,7 @@ export class StoreService {
       .toPromise();
   }
 
-  shareMyLocation() {
+  shareMyLocation(): void {
     this.subs = this.getUser()
       .pipe(
         switchMap(user =>
@@ -299,7 +299,6 @@ export class StoreService {
                 map(
                   location =>
                     ({
-                      userId: user.id,
                       location: new firestore.GeoPoint(
                         location.coords.latitude,
                         location.coords.longitude
@@ -308,9 +307,7 @@ export class StoreService {
                     } as Location)
                 ),
                 switchMap(location =>
-                  this.db
-                    .doc<Location>(`locations/${location.userId}`)
-                    .set(location)
+                  this.db.doc<Location>(`locations/${user.id}`).set(location)
                 ),
                 catchError(async err => {
                   await (await this.alertCtrl.create({
@@ -325,5 +322,30 @@ export class StoreService {
         )
       )
       .subscribe();
+  }
+
+  getFriendsWithLocations(search: string): Observable<Location[]> {
+    return this.getFriends(search).pipe(
+      switchMap(friends =>
+        friends.length === 0
+          ? of([] as Location[])
+          : combineLatest(
+              friends.map(friend =>
+                this.db
+                  .doc<Location>(`locations/${friend.id}`)
+                  .valueChanges()
+                  .pipe(
+                    map(
+                      loc =>
+                        ({
+                          ...loc,
+                          user: { name: friend.name, photo: friend.photo }
+                        } as Location)
+                    )
+                  )
+              )
+            )
+      )
+    );
   }
 }

@@ -7,9 +7,41 @@
 </ion-header>
 
 <ion-content>
-  <agm-map [latitude]="33.277568" [longitude]="-7.579578">
-    <agm-marker [latitude]="33.277568" [longitude]="-7.579578">
-      <agm-info-window>Me</agm-info-window>
+  <agm-map
+    [latitude]="myPosition?.lat || 33.2602523"
+    [longitude]="myPosition?.lng || -7.5984837"
+    [clickableIcons]="false"
+    [streetViewControl]="false"
+    [zoom]="12"
+  >
+    <agm-marker
+      *ngIf="myPosition"
+      [latitude]="myPosition?.lat"
+      [longitude]="myPosition?.lng"
+      iconUrl="/assets/location.png"
+    >
+      <agm-info-window *ngIf="user$ | async as user">
+        <div text-center>
+          <ion-avatar>
+            <img [src]="user.photo" />
+          </ion-avatar>
+          <strong>{{ user.name }}</strong>
+        </div>
+      </agm-info-window>
+    </agm-marker>
+    <agm-marker
+      *ngFor="let friend of friends$ | async"
+      [latitude]="friend.location.latitude"
+      [longitude]="friend.location.longitude"
+    >
+      <agm-info-window [isOpen]="true">
+        <div text-center>
+          <ion-avatar>
+            <img [src]="friend.user.photo || '/assets/user.png'" />
+          </ion-avatar>
+          <strong>{{ friend.user.name }}</strong>
+        </div>
+      </agm-info-window>
     </agm-marker>
   </agm-map>
 </ion-content>

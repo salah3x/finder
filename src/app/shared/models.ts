@@ -27,7 +27,7 @@ export interface Request {
 }
 
 export interface Location {
-  userId: string;
   location: firebase.firestore.GeoPoint;
   date: firebase.firestore.Timestamp;
+  user?: { name: string; photo: string };
 }
