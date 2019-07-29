@@ -6,11 +6,13 @@ import { AgmCoreModule } from '@agm/core';
 
 import { MapPage } from './map.page';
 import { environment } from '../../environments/environment';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
+    SharedModule,
     AgmCoreModule.forRoot({
       apiKey: environment.googleMapsApiKey
     }),

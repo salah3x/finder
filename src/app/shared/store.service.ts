@@ -90,6 +90,30 @@ export class StoreService {
                             )
                         )
                       )
+                ),
+                switchMap(friends =>
+                  friends.length === 0
+                    ? of([] as User[])
+                    : combineLatest(
+                        friends.map(friend =>
+                          this.db
+                            .doc<Location>(`locations/${friend.id}`)
+                            .valueChanges()
+                            .pipe(
+                              map(
+                                location =>
+                                  ({
+                                    ...friend,
+                                    location: {
+                                      latitude: location.location.latitude,
+                                      longitude: location.location.longitude,
+                                      date: location.date
+                                    }
+                                  } as User)
+                              )
+                            )
+                        )
+                      )
                 )
               )
           : of([] as User[])
@@ -322,30 +346,5 @@ export class StoreService {
         )
       )
       .subscribe();
-  }
-
-  getFriendsWithLocations(search: string): Observable<Location[]> {
-    return this.getFriends(search).pipe(
-      switchMap(friends =>
-        friends.length === 0
-          ? of([] as Location[])
-          : combineLatest(
-              friends.map(friend =>
-                this.db
-                  .doc<Location>(`locations/${friend.id}`)
-                  .valueChanges()
-                  .pipe(
-                    map(
-                      loc =>
-                        ({
-                          ...loc,
-                          user: { name: friend.name, photo: friend.photo }
-                        } as Location)
-                    )
-                  )
-              )
-            )
-      )
-    );
   }
 }

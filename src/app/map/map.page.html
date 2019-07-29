@@ -37,9 +37,10 @@
       <agm-info-window [isOpen]="true">
         <div text-center>
           <ion-avatar>
-            <img [src]="friend.user.photo || '/assets/user.png'" />
+            <img [src]="friend.photo || '/assets/user.png'" />
           </ion-avatar>
-          <strong>{{ friend.user.name }}</strong>
+          <strong>{{ friend.name }}</strong>
+          <p>{{ friend.location.date.toDate() | timeAgo }}</p>
         </div>
       </agm-info-window>
     </agm-marker>

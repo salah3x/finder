@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { Observable } from 'rxjs';
 
-import { User, Location } from '../shared/models';
+import { User } from '../shared/models';
 import { StoreService } from '../shared/store.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class MapPage {
   myPosition: { lat: number; lng: number };
   positionWatcher: string;
   user$: Observable<User>;
-  friends$: Observable<Location[]>;
+  friends$: Observable<User[]>;
 
   constructor(private store: StoreService) {}
 
@@ -31,7 +31,7 @@ export class MapPage {
       }
     );
     this.user$ = this.store.getUser();
-    this.friends$ = this.store.getFriendsWithLocations('');
+    this.friends$ = this.store.getFriends('');
   }
 
   ionViewDidLeave() {

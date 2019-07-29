@@ -42,12 +42,12 @@
             </ion-avatar>
             <ion-label text-center>{{ friend.name }}</ion-label>
             <ion-note
-              *ngIf="(friend.friendship?.date?.toDate() | timeAgo) !== 'now'"
+              *ngIf="(friend.location?.date?.toDate() | timeAgo) !== 'now'"
               slot="end"
-              >{{ friend.friendship?.date?.toDate() | timeAgo }}</ion-note
+              >{{ friend.location?.date?.toDate() | timeAgo }}</ion-note
             >
             <ion-icon
-              *ngIf="(friend.friendship?.date?.toDate() | timeAgo) === 'now'"
+              *ngIf="(friend.location?.date?.toDate() | timeAgo) === 'now'"
               name="wifi"
               slot="end"
               color="success"

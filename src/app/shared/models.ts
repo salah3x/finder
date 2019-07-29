@@ -13,6 +13,11 @@ export interface User {
     date: firebase.firestore.Timestamp;
     sentByMe: boolean;
   };
+  location?: {
+    latitude: number;
+    longitude: number;
+    date: firebase.firestore.Timestamp;
+  };
 }
 
 export interface Friendship {
@@ -29,5 +34,4 @@ export interface Request {
 export interface Location {
   location: firebase.firestore.GeoPoint;
   date: firebase.firestore.Timestamp;
-  user?: { name: string; photo: string };
 }
