@@ -17,8 +17,10 @@ export class MapPage implements OnInit {
     lng: -7.5984837
   };
   center: { lat: number; lng: number };
+  positionWatcher: string;
   user$: Observable<User>;
   friends$: Observable<User[]>;
+  centerToMyPosition = true;
 
   constructor(private store: StoreService, private route: ActivatedRoute) {}
 
@@ -31,18 +33,27 @@ export class MapPage implements OnInit {
         lng: +params.get('longitude') || this.myPosition.lng
       };
     });
-    let centerToMyPosition = true;
-    Plugins.Geolocation.watchPosition({}, (position: Position) => {
-      if (position) {
-        this.myPosition = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        if (centerToMyPosition) {
-          this.center = { ...this.myPosition };
-          centerToMyPosition = false;
+  }
+
+  ionViewWillEnter() {
+    this.positionWatcher = Plugins.Geolocation.watchPosition(
+      {},
+      (position: Position) => {
+        if (position) {
+          this.myPosition = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          if (this.centerToMyPosition) {
+            this.center = { ...this.myPosition };
+            this.centerToMyPosition = false;
+          }
         }
       }
-    });
+    );
+  }
+
+  ionViewDidLeave() {
+    Plugins.Geolocation.clearWatch({ id: this.positionWatcher });
   }
 }
