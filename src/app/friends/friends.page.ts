@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   AlertController,
   LoadingController,
@@ -24,7 +25,8 @@ export class FriendsPage implements OnInit, AfterViewInit {
     private store: StoreService,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -48,7 +50,14 @@ export class FriendsPage implements OnInit, AfterViewInit {
       buttons: [
         {
           text: 'Find on Map',
-          icon: 'pin'
+          icon: 'pin',
+          handler: () =>
+            this.router.navigate(['tabs', 'map'], {
+              queryParams: {
+                latitude: friend.location.latitude,
+                longitude: friend.location.longitude
+              }
+            })
         },
         {
           text: 'Unfriend',
