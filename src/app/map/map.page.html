@@ -1,8 +1,14 @@
 <ion-header>
-  <ion-toolbar color="primary">
-    <ion-title text-center>
-      Finder
-    </ion-title>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button> </ion-button>
+    </ion-buttons>
+    <ion-searchbar (ionChange)="search($event.detail.value)"></ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-spinner *ngIf="loading"></ion-spinner>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

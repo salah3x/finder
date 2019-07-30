@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Plugins } from '@capacitor/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { User } from '../shared/models';
 import { StoreService } from '../shared/store.service';
+import { switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-map',
   templateUrl: 'map.page.html',
   styleUrls: ['map.page.scss']
 })
-export class MapPage implements OnInit {
+export class MapPage implements OnInit, AfterViewInit {
   myPosition: { lat: number; lng: number } = {
     lat: 33.4602523,
     lng: -7.5984837
@@ -21,12 +22,17 @@ export class MapPage implements OnInit {
   user$: Observable<User>;
   friends$: Observable<User[]>;
   centerToMyPosition = true;
+  searchTerm = new Subject<string>();
+  loading = false;
 
   constructor(private store: StoreService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.user$ = this.store.getUser();
-    this.friends$ = this.store.getFriends('');
+    this.friends$ = this.searchTerm.pipe(
+      switchMap(s => this.store.getFriends(s)),
+      tap(() => (this.loading = false))
+    );
     this.route.queryParamMap.subscribe(params => {
       this.center = {
         lat: +params.get('latitude') || this.myPosition.lat,
@@ -55,5 +61,14 @@ export class MapPage implements OnInit {
 
   ionViewDidLeave() {
     Plugins.Geolocation.clearWatch({ id: this.positionWatcher });
+  }
+
+  ngAfterViewInit() {
+    this.search('');
+  }
+
+  search(s: string) {
+    this.loading = true;
+    this.searchTerm.next(s);
   }
 }
