@@ -2,14 +2,13 @@ import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 import { Plugins, Capacitor } from '@capacitor/core';
-import { StoreService } from './shared/store.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  constructor(private platform: Platform, private store: StoreService) {
+  constructor(private platform: Platform) {
     this.initializeApp();
   }
 
@@ -19,6 +18,5 @@ export class AppComponent {
         Plugins.SplashScreen.hide();
       }
     });
-    this.store.shareMyLocation();
   }
 }

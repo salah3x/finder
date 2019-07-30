@@ -306,14 +306,14 @@ export class StoreService {
         tap(() => {
           this.subs.unsubscribe();
           if (sharing) {
-            this.shareMyLocation();
+            this.startSharingMyLocation();
           }
         })
       )
       .toPromise();
   }
 
-  shareMyLocation(): void {
+  startSharingMyLocation(): void {
     this.subs = this.getUser()
       .pipe(
         switchMap(user =>
