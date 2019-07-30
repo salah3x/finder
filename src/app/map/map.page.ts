@@ -13,11 +13,8 @@ import { switchMap, tap } from 'rxjs/operators';
   styleUrls: ['map.page.scss']
 })
 export class MapPage implements OnInit, AfterViewInit {
-  myPosition: { lat: number; lng: number } = {
-    lat: 33.4602523,
-    lng: -7.5984837
-  };
-  center: { lat: number; lng: number };
+  myPosition: { lat?: number; lng?: number } = {};
+  center: { lat?: number; lng?: number };
   positionWatcher: string;
   user$: Observable<User>;
   friends$: Observable<User[]>;
@@ -35,8 +32,8 @@ export class MapPage implements OnInit, AfterViewInit {
     );
     this.route.queryParamMap.subscribe(params => {
       this.center = {
-        lat: +params.get('latitude') || this.myPosition.lat,
-        lng: +params.get('longitude') || this.myPosition.lng
+        lat: +params.get('latitude') || this.myPosition.lat || 33.2602523,
+        lng: +params.get('longitude') || this.myPosition.lng || -7.5984837
       };
     });
   }
