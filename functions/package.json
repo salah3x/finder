@@ -1,6 +1,6 @@
 {
   "name": "finder-functions",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "The firebase cloud functions backend for the 'finder' app",
   "author": {
     "name": "Salah E. Loukili",
