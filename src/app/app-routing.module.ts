@@ -15,6 +15,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./auth/auth.module').then(m => m.AuthPageModule),
     canActivate: [FirstVisitGuard]
+  },
+  {
+    path: 'welcome',
+    loadChildren: () =>
+      import('./welcome/welcome.module').then(m => m.WelcomePageModule)
   }
 ];
 @NgModule({
