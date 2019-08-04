@@ -51,13 +51,22 @@ export class FriendsPage implements OnInit, AfterViewInit {
         {
           text: 'Find on Map',
           icon: 'pin',
-          handler: () =>
-            this.router.navigate(['tabs', 'map'], {
+          handler: async () => {
+            if (!friend.location) {
+              (await this.alertCtrl.create({
+                header: `Couldn't find location`,
+                message: `${friend.name} is not sharing location.`,
+                buttons: [{ text: 'Close', role: 'cancel' }]
+              })).present();
+              return;
+            }
+            return this.router.navigate(['tabs', 'map'], {
               queryParams: {
                 latitude: friend.location.latitude,
                 longitude: friend.location.longitude
               }
-            })
+            });
+          }
         },
         {
           text: 'Unfriend',
