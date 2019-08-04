@@ -100,16 +100,17 @@ export class StoreService {
                             .doc<Location>(`locations/${friend.id}`)
                             .valueChanges()
                             .pipe(
-                              map(
-                                location =>
-                                  ({
-                                    ...friend,
-                                    location: {
-                                      latitude: location.location.latitude,
-                                      longitude: location.location.longitude,
-                                      date: location.date
-                                    }
-                                  } as User)
+                              map(location =>
+                                location
+                                  ? ({
+                                      ...friend,
+                                      location: {
+                                        latitude: location.location.latitude,
+                                        longitude: location.location.longitude,
+                                        date: location.date
+                                      }
+                                    } as User)
+                                  : friend
                               )
                             )
                         )
