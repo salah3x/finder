@@ -1,11 +1,146 @@
 <ion-content>
-  <ion-slides pager="true" [options]="slideOpts">
+  <ion-slides pager="true" [options]="slideOpts" #slides>
     <ion-slide>
-      <h1>Slide 1</h1>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <h1>Welcome to Finder</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <ion-img src="/assets/icon/favicon.png"></ion-img>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <ion-text padding color="medium">
+              A cross-platform app to share your location and find your friends
+              on the map in real time
+            </ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-fab vertical="center" horizontal="end">
+        <ion-fab-button (click)="slides.slideNext()">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-slide>
     <ion-slide>
-      <h1>Slide 2</h1>
-      <ion-button (click)="onStart()">Start</ion-button>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <h1>Add friends</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <ion-img src="/assets/add_friends.png"></ion-img>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <ion-text padding color="medium">
+              Search for friends and send friendship requests
+            </ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-fab vertical="center" horizontal="start">
+        <ion-fab-button (click)="slides.slidePrev()" color="light">
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <ion-fab vertical="center" horizontal="end">
+        <ion-fab-button (click)="slides.slideNext()">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </ion-slide>
+    <ion-slide>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <h1>Find friends</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <ion-img src="/assets/map.png"></ion-img>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <ion-text padding color="medium">
+              Locate your friends on the map in real-time
+            </ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-fab vertical="center" horizontal="start">
+        <ion-fab-button (click)="slides.slidePrev()" color="light">
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <ion-fab vertical="center" horizontal="end">
+        <ion-fab-button (click)="slides.slideNext()">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </ion-slide>
+    <ion-slide>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <h1>Customize profile</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <ion-img src="/assets/settings.png"></ion-img>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <ion-text padding color="medium">
+              Change your name and picture and share your location with your
+              friends
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-fab vertical="center" horizontal="start">
+          <ion-fab-button (click)="slides.slidePrev()" color="light">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+        <ion-fab vertical="center" horizontal="end">
+          <ion-fab-button (click)="slides.slideNext()">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+      </ion-grid>
+    </ion-slide>
+    <ion-slide>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <h1>Enjoy the app</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-md="6" offset-md="3">
+            <ion-button (click)="onStart()">
+              Start
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-fab vertical="center" horizontal="start">
+        <ion-fab-button (click)="slides.slidePrev()" color="light">
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-slide>
   </ion-slides>
 </ion-content>
