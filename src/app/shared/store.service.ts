@@ -40,7 +40,7 @@ export class StoreService {
               .valueChanges()
               .pipe(
                 tap(u => {
-                  if (!u.name) {
+                  if (u && !u.name) {
                     this.updateUsername(u.id, user.displayName);
                   }
                 })
