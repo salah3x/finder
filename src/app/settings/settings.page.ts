@@ -3,10 +3,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AlertController, LoadingController, IonToggle } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 import { User } from '../shared/models';
 import { StoreService } from '../shared/store.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-settings',
@@ -14,9 +14,8 @@ import { StoreService } from '../shared/store.service';
   styleUrls: ['./settings.page.scss']
 })
 export class SettingsPage implements OnInit {
-  user$: Observable<User>;
+  user$: Observable<User | { offline: boolean }>;
   isCopying = false;
-  loading = false;
   echoing = false;
 
   constructor(
@@ -27,8 +26,9 @@ export class SettingsPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loading = true;
-    this.user$ = this.store.getUser().pipe(tap(() => (this.loading = false)));
+    this.user$ = this.store
+      .getUser()
+      .pipe(map(u => (u ? u : { offline: true })));
   }
 
   onSignOut() {

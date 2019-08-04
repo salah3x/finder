@@ -6,106 +6,111 @@
 
 <ion-content>
   <ion-grid>
-    <ion-row *ngIf="loading" text-center>
-      <ion-col>
-        <ion-spinner></ion-spinner>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="user$ | async as user; else login">
-      <ion-col size-md="6" offset-md="3" text-center>
-        <ion-card color="light">
-          <ion-avatar>
-            <ion-img [src]="user.photo || 'assets/user.png'"></ion-img>
-          </ion-avatar>
-          <ion-card-header>
-            <ion-card-title>{{ user.name }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content no-padding>
-            <ion-button expand="block" color="dark" (click)="onSignOut()">
-              <ion-label>Sign out</ion-label>
-              <ion-icon name="log-out" slot="start"></ion-icon>
-            </ion-button>
-          </ion-card-content>
-        </ion-card>
-        <ion-item color="light" lines="none" margin>
-          <ion-label> <b>ID :</b> {{ user.id }} </ion-label>
-          <ion-button
-            slot="end"
-            fill="clear"
-            size="small"
-            color="medium"
-            (click)="copyToClipboard(user.id)"
-            title="Copy to clipboard"
-          >
-            <ion-icon
-              slot="icon-only"
-              [name]="isCopying ? 'done-all' : 'clipboard'"
-            ></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-item text-center padding-horizontal>
-          <ion-label color="medium">
-            Customize your profile
-          </ion-label>
-        </ion-item>
-        <ion-item lines="none" margin>
-          <ion-label> Share location </ion-label>
-          <ion-icon slot="start" color="primary" name="locate"></ion-icon>
-          <ion-toggle
-            slot="end"
-            [checked]="user.isSharing"
-            (ionChange)="onChangeSharing(toggle)"
-            #toggle
-          ></ion-toggle>
-        </ion-item>
-        <ion-item
-          lines="none"
-          (click)="onChangeName(user.id, user.name)"
-          margin
-          detail
-          button
-        >
-          <ion-label>Change your name</ion-label>
-          <ion-icon slot="start" color="primary" name="create"></ion-icon>
-        </ion-item>
-        <ion-item
-          lines="none"
-          routerLink="/tabs/settings/picture"
-          detail
-          button
-          margin
-        >
-          <ion-label>Change your picture</ion-label>
-          <ion-icon slot="start" color="primary" name="camera"></ion-icon>
-        </ion-item>
-        <ion-button
-          expand="block"
-          color="danger"
-          (click)="onDeleteAccount()"
-          padding-horizontal
-        >
-          <ion-label>Delete Account</ion-label>
-          <ion-icon slot="start" name="trash"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-    <ng-template #login>
-      <ion-row padding *ngIf="!loading">
-        <ion-col size-md="6" offset-md="3" padding>
-          <ion-text padding text-center>
-            <h1>You are not signed in</h1>
-            <p>
-              You have to sign in first to be able to add friends and share your
-              location.
-            </p>
-          </ion-text>
-          <ion-button routerLink="/auth" *ngIf="!loading" expand="block">
-            <ion-label>Sign in</ion-label>
-            <ion-icon name="log-in" slot="start"></ion-icon>
-          </ion-button>
+    <ng-template #loading>
+      <ion-row text-center>
+        <ion-col>
+          <ion-spinner></ion-spinner>
         </ion-col>
       </ion-row>
     </ng-template>
+    <ion-row *ngIf="user$ | async as user; else loading">
+      <ion-col
+        size-md="6"
+        offset-md="3"
+        padding
+        *ngIf="user.offline; else info"
+      >
+        <ion-text padding text-center>
+          <h1>You are not signed in</h1>
+          <p>
+            You have to sign in first to be able to add friends and share your
+            location.
+          </p>
+        </ion-text>
+        <ion-button routerLink="/auth" expand="block">
+          <ion-label>Sign in</ion-label>
+          <ion-icon name="log-in" slot="start"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ng-template #info>
+        <ion-col size-md="6" offset-md="3" text-center>
+          <ion-card color="light">
+            <ion-avatar>
+              <ion-img [src]="user.photo || 'assets/user.png'"></ion-img>
+            </ion-avatar>
+            <ion-card-header>
+              <ion-card-title>{{ user.name }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content no-padding>
+              <ion-button expand="block" color="dark" (click)="onSignOut()">
+                <ion-label>Sign out</ion-label>
+                <ion-icon name="log-out" slot="start"></ion-icon>
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+          <ion-item color="light" lines="none" margin>
+            <ion-label> <b>ID :</b> {{ user.id }} </ion-label>
+            <ion-button
+              slot="end"
+              fill="clear"
+              size="small"
+              color="medium"
+              (click)="copyToClipboard(user.id)"
+              title="Copy to clipboard"
+            >
+              <ion-icon
+                slot="icon-only"
+                [name]="isCopying ? 'done-all' : 'clipboard'"
+              ></ion-icon>
+            </ion-button>
+          </ion-item>
+          <ion-item text-center padding-horizontal>
+            <ion-label color="medium">
+              Customize your profile
+            </ion-label>
+          </ion-item>
+          <ion-item lines="none" margin>
+            <ion-label> Share location </ion-label>
+            <ion-icon slot="start" color="primary" name="locate"></ion-icon>
+            <ion-toggle
+              slot="end"
+              [checked]="user.isSharing"
+              (ionChange)="onChangeSharing(toggle)"
+              #toggle
+            ></ion-toggle>
+          </ion-item>
+          <ion-item
+            lines="none"
+            (click)="onChangeName(user.id, user.name)"
+            margin
+            detail
+            button
+          >
+            <ion-label>Change your name</ion-label>
+            <ion-icon slot="start" color="primary" name="create"></ion-icon>
+          </ion-item>
+          <ion-item
+            lines="none"
+            routerLink="/tabs/settings/picture"
+            detail
+            button
+            margin
+          >
+            <ion-label>Change your picture</ion-label>
+            <ion-icon slot="start" color="primary" name="camera"></ion-icon>
+          </ion-item>
+          <ion-button
+            expand="block"
+            color="danger"
+            (click)="onDeleteAccount()"
+            padding-horizontal
+          >
+            <ion-label>Delete Account</ion-label>
+            <ion-icon slot="start" name="trash"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ng-template>
+    </ion-row>
   </ion-grid>
 </ion-content>
 <ion-footer text-center padding>
