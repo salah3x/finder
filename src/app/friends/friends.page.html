@@ -42,7 +42,10 @@
             </ion-avatar>
             <ion-label text-center>{{ friend.name }}</ion-label>
             <ion-note
-              *ngIf="(friend.location?.date?.toDate() | timeAgo) !== 'now'"
+              *ngIf="
+                friend.location?.date &&
+                (friend.location?.date?.toDate() | timeAgo) !== 'now'
+              "
               slot="end"
               >{{ friend.location?.date?.toDate() | timeAgo }}</ion-note
             >
