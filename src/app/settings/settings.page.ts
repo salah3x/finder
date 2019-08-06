@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AlertController, LoadingController, IonToggle } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  IonToggle,
+  ToastController
+} from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { User } from '../shared/models';
 import { StoreService } from '../shared/store.service';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-settings',
@@ -22,7 +27,8 @@ export class SettingsPage implements OnInit {
     private store: StoreService,
     private authService: AngularFireAuth,
     private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController
   ) {}
 
   ngOnInit() {
@@ -60,7 +66,13 @@ export class SettingsPage implements OnInit {
         },
         {
           text: 'Save',
-          handler: async result => {
+          handler: async (result: { name: string }) => {
+            if (!result.name.trim()) {
+              return (await this.toastCtrl.create({
+                message: 'The name should not be empty',
+                duration: 3000
+              })).present();
+            }
             const loading = await this.loadingCtrl.create({
               message: 'Updating your name...'
             });

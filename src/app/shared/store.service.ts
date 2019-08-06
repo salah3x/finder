@@ -290,7 +290,7 @@ export class StoreService {
         ),
         map(_ => {}),
         catchError(err => {
-          console.error(err);
+          console.error('Failed deleting account: ', err);
           return throwError(err.error.message || 'Unknown');
         })
       )

@@ -97,7 +97,7 @@ export class AddFriendsPage implements OnInit, AfterViewInit {
             try {
               await this.store.addFriend(friend.id);
             } catch (err) {
-              console.error('Unfriending failed: ', err);
+              console.error('Failed adding friend: ', err);
             } finally {
               await loader.dismiss();
             }
