@@ -1,0 +1,7 @@
+{
+  "appId": "io.github.salah3x.finder",
+  "appName": "finder",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}
