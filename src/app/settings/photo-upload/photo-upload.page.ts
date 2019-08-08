@@ -44,7 +44,7 @@ export class PhotoUploadPage implements OnInit {
       await loader.dismiss();
       await (await this.alertCtrl.create({
         header: 'Error',
-        message: err,
+        message: err.message || err,
         buttons: [{ text: 'Close', role: 'cancel' }]
       })).present();
     }
